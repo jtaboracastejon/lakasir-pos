@@ -50,7 +50,7 @@ if (! function_exists('price_format')) {
         return Number::currency(
             number: $price,
             in: Setting::get('currency', 'IDR'),
-            locale: Profile::get()->locale ?? 'en'
+            locale: 'en-US'  // Force en-US locale to ensure dot as decimal separator
         );
     }
 }
