@@ -64,7 +64,7 @@ class EditProduct extends EditRecord
             return optional(Storage::disk('public'))->url($heroImage);
         });
 
-        if (! $product->hero_images) {
+        if (!$product->hero_images) {
             $product->hero_images = collect([]);
         }
         $deletedHeroImages = $product->hero_images->diff($urls);
