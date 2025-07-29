@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Tenants\User;
+use Filament\Tables\Table;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
@@ -28,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Configurar Filament para usar punto decimal (formato US/MX)
+        Table::$defaultNumberLocale = 'en_US';
+        Table::$defaultCurrency = 'MXN';
+
         Builder::macro('filter', function (Request $request) {
             /* WIP:  <07-08-22, sheenazien8> */
             $columns = $request->filters;
