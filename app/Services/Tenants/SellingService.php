@@ -46,7 +46,7 @@ class SellingService
             $data['tax'] = Setting::get('default_tax');
         }
         $request = [];
-        $payed_money = ($data['payed_money'] ?? 0);
+        $payed_money = (float) ($data['payed_money'] ?? 0);
         if (isset($data['friend_price']) && ! $data['friend_price']) {
             $total_price = 0;
             $total_price_after_discount = 0;
@@ -65,9 +65,11 @@ class SellingService
                     $total_cost += $modelProduct->initial_price * $product['qty'];
                 }
             );
-            $total_price = ($tax_price = $total_price * ($tax = $data['tax'] ?? 0) / 100) + $total_price;
+            $tax = (float) ($data['tax'] ?? 0);
+            $tax_price = $total_price * $tax / 100;
+            $total_price = $tax_price + $total_price;
             $total_qty = collect($data['products'])->sum('qty');
-            $discount_price = $data['discount_price'] ?? 0;
+            $discount_price = (float) ($data['discount_price'] ?? 0);
             if ($data['voucher'] ?? false) {
                 $voucherService = new VoucherService();
                 if ($voucher = $voucherService->applyable($data['voucher'], $total_price)) {
@@ -89,7 +91,7 @@ class SellingService
             ];
         } else {
             $request = [
-                'money_changes' => ($data['payed_money'] ?? 0) - $data['total_price'],
+                'money_changes' => $payed_money - (float) $data['total_price'],
                 'payed_money' => $payed_money,
             ];
         }
